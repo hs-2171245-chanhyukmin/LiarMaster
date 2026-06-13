@@ -25,6 +25,7 @@ class ResultViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        overrideUserInterfaceStyle = .light
         setupUI()
         animateReveal()
     }
