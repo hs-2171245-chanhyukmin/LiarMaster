@@ -3,7 +3,9 @@
 > 오프라인 보드게임 "라이어 게임"의 사회자 역할을 대신해주는 iOS 앱
 
 ---
+## 🎬 시연 영상
 
+[![라이어 마스터 시연 영상](https://img.youtube.com/vi/yppFWBwDi_Y/0.jpg)](https://youtu.be/yppFWBwDi_Y?si=eJ2fk6_7o7ggmUoo)
 ## � 스크린샷
 
 | 게임 설정 | 역할 확인 | 타이머 | 타이머 진행 |
