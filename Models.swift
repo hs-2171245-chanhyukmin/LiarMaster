@@ -7,6 +7,13 @@ let wordBank: [String: [String]] = [
     "동물": ["강아지", "고양이", "토끼", "사자", "호랑이", "코끼리", "기린", "펭귄", "독수리", "돌고래"]
 ]
 
+// MARK: - 게임 최종 결과
+enum GameOutcome {
+    case citizensWin    // 라이어 잡고 제시어 못 맞춤 → 시민 승
+    case liarWinsGuess  // 라이어 잡혔지만 제시어 맞춤 → 라이어 승
+    case liarWinsVote   // 라이어 못 잡음 → 라이어 승
+}
+
 // MARK: - 게임 전반 설정을 저장하는 모델
 struct GameSettings {
     var totalPlayers: Int = 4

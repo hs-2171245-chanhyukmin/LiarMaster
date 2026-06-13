@@ -143,11 +143,16 @@ class VoteViewController: UIViewController {
 
     @objc private func confirmVote() {
         guard let selected = selectedPlayer else { return }
-        let resultVC = ResultViewController(
-            liarRoles: liarRoles,
-            keyword: keyword,
-            votedPlayerNumber: selected
-        )
-        navigationController?.pushViewController(resultVC, animated: true)
+        let isCorrect = liarRoles.contains { $0.playerNumber == selected }
+
+        if isCorrect {
+            // 라이어 잡힘 → 라이어 반격 기회
+            let liarGuessVC = LiarGuessViewController(liarRoles: liarRoles, keyword: keyword)
+            navigationController?.pushViewController(liarGuessVC, animated: true)
+        } else {
+            // 라이어 못 잡음 → 라이어 승
+            let resultVC = ResultViewController(liarRoles: liarRoles, keyword: keyword, outcome: .liarWinsVote)
+            navigationController?.pushViewController(resultVC, animated: true)
+        }
     }
 }

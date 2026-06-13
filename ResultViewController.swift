@@ -5,10 +5,10 @@ class ResultViewController: UIViewController {
     // MARK: - Data
     private let liarRoles: [PlayerRole]
     private let keyword: String
-    private let votedPlayerNumber: Int
+    private let outcome: GameOutcome
 
     // MARK: - UI Components
-    private let voteResultLabel = UILabel()
+    private let outcomeLabel = UILabel()    // 승패 결과
     private let announceTitleLabel = UILabel()
     private let liarNumberLabel = UILabel()
     private let keywordTitleLabel = UILabel()
@@ -16,10 +16,10 @@ class ResultViewController: UIViewController {
     private let restartButton = UIButton(type: .system)
 
     // MARK: - Init
-    init(liarRoles: [PlayerRole], keyword: String, votedPlayerNumber: Int) {
+    init(liarRoles: [PlayerRole], keyword: String, outcome: GameOutcome) {
         self.liarRoles = liarRoles
         self.keyword = keyword
-        self.votedPlayerNumber = votedPlayerNumber
+        self.outcome = outcome
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -36,51 +36,61 @@ class ResultViewController: UIViewController {
     // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = .white
-        title = "결과 공개"
+        title = "최종 결과"
         navigationItem.hidesBackButton = true
 
-        // 투표 결과
-        let isCorrect = liarRoles.contains { $0.playerNumber == votedPlayerNumber }
-        voteResultLabel.text = isCorrect ? "✅ 정답! 라이어를 잡았어요!" : "❌ 틀렸어요! 라이어가 살아남았어요!"
-        voteResultLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        voteResultLabel.textColor = isCorrect ? .systemGreen : .systemRed
-        voteResultLabel.textAlignment = .center
-        voteResultLabel.numberOfLines = 0
+        // 승패 배너
+        switch outcome {
+        case .citizensWin:
+            outcomeLabel.text = "🏆 시민 승리!\n라이어를 잡고 제시어도 지켰어요!"
+            outcomeLabel.textColor = .systemGreen
+        case .liarWinsGuess:
+            outcomeLabel.text = "🤥 라이어 승리!\n라이어가 제시어를 맞췄어요!"
+            outcomeLabel.textColor = .systemRed
+        case .liarWinsVote:
+            outcomeLabel.text = "🤥 라이어 승리!\n라이어를 찾지 못했어요!"
+            outcomeLabel.textColor = .systemRed
+        }
+        outcomeLabel.font = UIFont.boldSystemFont(ofSize: 22)
+        outcomeLabel.textAlignment = .center
+        outcomeLabel.numberOfLines = 0
+        outcomeLabel.backgroundColor = outcomeLabel.textColor.withAlphaComponent(0.08)
+        outcomeLabel.layer.cornerRadius = 14
+        outcomeLabel.clipsToBounds = true
 
         // "라이어는 바로..."
         announceTitleLabel.text = "🎭 라이어는 바로..."
-        announceTitleLabel.font = UIFont.boldSystemFont(ofSize: 26)
+        announceTitleLabel.font = UIFont.boldSystemFont(ofSize: 24)
         announceTitleLabel.textAlignment = .center
 
         // 라이어 번호
         let liarNumbers = liarRoles.map { "플레이어 \($0.playerNumber)번" }.joined(separator: ", ")
         liarNumberLabel.text = liarNumbers
-        liarNumberLabel.font = UIFont.boldSystemFont(ofSize: 52)
+        liarNumberLabel.font = UIFont.boldSystemFont(ofSize: 48)
         liarNumberLabel.textColor = .systemRed
         liarNumberLabel.textAlignment = .center
         liarNumberLabel.adjustsFontSizeToFitWidth = true
         liarNumberLabel.minimumScaleFactor = 0.5
-        liarNumberLabel.alpha = 0  // 애니메이션 시작 전 숨김
+        liarNumberLabel.alpha = 0
 
-        // 정답 제시어 제목
+        // 정답 제시어
         keywordTitleLabel.text = "정답 제시어"
         keywordTitleLabel.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         keywordTitleLabel.textColor = .secondaryLabel
         keywordTitleLabel.textAlignment = .center
 
-        // 정답 단어
         keywordLabel.text = keyword
         keywordLabel.font = UIFont.boldSystemFont(ofSize: 40)
-        keywordLabel.textColor = .systemBlue
+        keywordLabel.textColor = .systemIndigo
         keywordLabel.textAlignment = .center
-        keywordLabel.alpha = 0  // 애니메이션 시작 전 숨김
+        keywordLabel.alpha = 0
 
         // 구분선
         let separator = UIView()
         separator.backgroundColor = .systemGray5
         separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
 
-        // Restart Button
+        // 다시 하기 버튼
         restartButton.setTitle("🔄  다시 하기", for: .normal)
         restartButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         restartButton.backgroundColor = .systemIndigo
@@ -93,7 +103,7 @@ class ResultViewController: UIViewController {
         restartButton.addTarget(self, action: #selector(restart), for: .touchUpInside)
 
         let stack = UIStackView(arrangedSubviews: [
-            voteResultLabel,
+            outcomeLabel,
             announceTitleLabel,
             liarNumberLabel,
             separator,
@@ -102,8 +112,9 @@ class ResultViewController: UIViewController {
             restartButton
         ])
         stack.axis = .vertical
-        stack.spacing = 22
+        stack.spacing = 20
         stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.setCustomSpacing(8, after: outcomeLabel)
 
         restartButton.heightAnchor.constraint(equalToConstant: 58).isActive = true
 
@@ -117,7 +128,6 @@ class ResultViewController: UIViewController {
 
     // MARK: - Animation
     private func animateReveal() {
-        // 라이어 번호 0.4초 후 등장
         UIView.animate(withDuration: 0.6, delay: 0.4, usingSpringWithDamping: 0.6,
                        initialSpringVelocity: 0.5, options: .curveEaseOut) {
             self.liarNumberLabel.alpha = 1
@@ -127,7 +137,6 @@ class ResultViewController: UIViewController {
                 self.liarNumberLabel.transform = .identity
             }
         }
-        // 정답 1.2초 후 등장
         UIView.animate(withDuration: 0.5, delay: 1.2, options: .curveEaseOut) {
             self.keywordLabel.alpha = 1
         }
@@ -138,3 +147,4 @@ class ResultViewController: UIViewController {
         navigationController?.popToRootViewController(animated: true)
     }
 }
+
