@@ -32,7 +32,7 @@ class ResultViewController: UIViewController {
 
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
         title = "결과 공개"
         navigationItem.hidesBackButton = true
 

@@ -26,7 +26,7 @@ class HomeViewController: UIViewController {
 
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = UIColor.systemIndigo.withAlphaComponent(0.04)
+        view.backgroundColor = .white
 
         // Title
         titleLabel.text = "🎭 LIAR MASTER"

@@ -34,7 +34,7 @@ class CardViewController: UIViewController {
 
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
         title = "역할 확인"
         navigationItem.hidesBackButton = true
         // 처음으로 버튼 (설정 실수 시 복귀)
