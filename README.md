@@ -6,6 +6,8 @@
 ## 🎬 시연 영상
 
 [![라이어 마스터 시연 영상](https://img.youtube.com/vi/yppFWBwDi_Y/0.jpg)](https://youtu.be/yppFWBwDi_Y?si=eJ2fk6_7o7ggmUoo)
+
+🔗 **영상 링크**: https://youtu.be/yppFWBwDi_Y?si=eJ2fk6_7o7ggmUoo
 ## � 스크린샷
 
 | 게임 설정 | 역할 확인 | 타이머 | 타이머 진행 |
