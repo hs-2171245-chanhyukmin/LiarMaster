@@ -10,9 +10,9 @@
 |:---------:|:---------:|:------:|:-----------:|
 | <img src="image/01_home.png" width="180"> | <img src="image/02_card.png" width="180"> | <img src="image/03_timer_ready.png" width="180"> | <img src="image/04_timer_running.png" width="180"> |
 
-| 라이어 지목 | 최종 결과 (라이어 승) | 라이어 반격 | 최종 결과 (역전승) |
-|:-----------:|:--------------------:|:-----------:|:-----------------:|
-| <img src="image/05_vote.png" width="180"> | <img src="image/06_result_liar_wins.png" width="180"> | <img src="image/07_liar_guess.png" width="180"> | <img src="image/08_result_liar_guess_wins.png" width="180"> |
+| 라이어 지목 | 최종 결과 (라이어 승) | 라이어 반격 | 최종 결과 (역전승) | 최종 결과 (시민 승) |
+|:-----------:|:--------------------:|:-----------:|:-----------------:|:------------------:|
+| <img src="image/05_vote.png" width="180"> | <img src="image/06_result_liar_wins.png" width="180"> | <img src="image/07_liar_guess.png" width="180"> | <img src="image/08_result_liar_guess_wins.png" width="180"> | <img src="image/09_result_citizens_win.png" width="180"> |
 
 ---
 
