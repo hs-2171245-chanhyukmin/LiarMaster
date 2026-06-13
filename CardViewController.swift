@@ -7,6 +7,7 @@ class CardViewController: UIViewController {
     private var currentIndex = 0
 
     // MARK: - UI Components
+    private let progressLabel = UILabel()   // "1 / 4명 확인 완료"
     private let playerLabel = UILabel()
     private let cardView = UIView()
     private let questionMarkLabel = UILabel()
@@ -35,6 +36,18 @@ class CardViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "역할 확인"
         navigationItem.hidesBackButton = true
+        // 처음으로 버튼 (설정 실수 시 복귀)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "처음으로",
+            style: .plain,
+            target: self,
+            action: #selector(goHome)
+        )
+
+        // Progress Label
+        progressLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        progressLabel.textAlignment = .center
+        progressLabel.textColor = .secondaryLabel
 
         // Player Label
         playerLabel.font = UIFont.boldSystemFont(ofSize: 26)
@@ -44,7 +57,7 @@ class CardViewController: UIViewController {
         cardView.backgroundColor = .secondarySystemBackground
         cardView.layer.cornerRadius = 24
         cardView.layer.borderWidth = 2.5
-        cardView.layer.borderColor = UIColor.systemBlue.cgColor
+        cardView.layer.borderColor = UIColor.systemIndigo.cgColor
         cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOpacity = 0.08
         cardView.layer.shadowOffset = CGSize(width: 0, height: 4)
@@ -79,9 +92,13 @@ class CardViewController: UIViewController {
         // Hold Button (꾹 누르기)
         holdButton.setTitle("꾹 눌러서 확인 👆", for: .normal)
         holdButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        holdButton.backgroundColor = .systemBlue
+        holdButton.backgroundColor = .systemIndigo
         holdButton.setTitleColor(.white, for: .normal)
         holdButton.layer.cornerRadius = 16
+        holdButton.layer.shadowColor = UIColor.systemIndigo.cgColor
+        holdButton.layer.shadowOpacity = 0.25
+        holdButton.layer.shadowOffset = CGSize(width: 0, height: 3)
+        holdButton.layer.shadowRadius = 6
         holdButton.addTarget(self, action: #selector(holdDown), for: .touchDown)
         holdButton.addTarget(self, action: #selector(holdUp), for: [.touchUpInside, .touchUpOutside, .touchCancel])
 
@@ -101,13 +118,17 @@ class CardViewController: UIViewController {
         nextButton.addTarget(self, action: #selector(nextPlayer), for: .touchUpInside)
 
         // Layout
-        [playerLabel, cardView, holdButton, hintLabel, nextButton].forEach {
+        [progressLabel, playerLabel, cardView, holdButton, hintLabel, nextButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
 
         NSLayoutConstraint.activate([
-            playerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 36),
+            progressLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            progressLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            progressLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+
+            playerLabel.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: 12),
             playerLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
             playerLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
 
@@ -135,6 +156,7 @@ class CardViewController: UIViewController {
     // MARK: - State Update
     private func updateForCurrentPlayer() {
         let role = roles[currentIndex]
+        progressLabel.text = "\(currentIndex) / \(roles.count)명 확인 완료"
         playerLabel.text = "👤 플레이어 \(role.playerNumber)번 차례"
         revealLabel.text = role.keyword
         revealLabel.textColor = role.isLiar ? .systemRed : .systemBlue
@@ -149,10 +171,23 @@ class CardViewController: UIViewController {
         questionMarkLabel.alpha = 1
         revealLabel.alpha = 0
         cardView.backgroundColor = .secondarySystemBackground
-        cardView.layer.borderColor = UIColor.systemBlue.cgColor
+cardView.layer.borderColor = UIColor.systemIndigo.cgColor
     }
 
     // MARK: - Actions
+    @objc private func goHome() {
+        let alert = UIAlertController(
+            title: "처음으로 돌아가기",
+            message: "설정 화면으로 돌아가시겠어요?\n게임 진행이 초기화됩니다.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "처음으로", style: .destructive) { [weak self] _ in
+            self?.navigationController?.popToRootViewController(animated: true)
+        })
+        present(alert, animated: true)
+    }
+
     @objc private func holdDown() {
         // touchDown: 손가락을 대고 있는 동안만 제시어 공개
         UIView.animate(withDuration: 0.15) {
@@ -161,10 +196,10 @@ class CardViewController: UIViewController {
             let isLiar = self.roles[self.currentIndex].isLiar
             self.cardView.backgroundColor = isLiar
                 ? UIColor.systemRed.withAlphaComponent(0.12)
-                : UIColor.systemBlue.withAlphaComponent(0.12)
+                : UIColor.systemIndigo.withAlphaComponent(0.10)
             self.cardView.layer.borderColor = isLiar
                 ? UIColor.systemRed.cgColor
-                : UIColor.systemBlue.cgColor
+                : UIColor.systemIndigo.cgColor
         }
     }
 

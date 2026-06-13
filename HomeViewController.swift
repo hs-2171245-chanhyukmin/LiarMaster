@@ -25,12 +25,13 @@ class HomeViewController: UIViewController {
 
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemIndigo.withAlphaComponent(0.04)
 
         // Title
         titleLabel.text = "🎭 LIAR MASTER"
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 34)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
         titleLabel.textAlignment = .center
+        titleLabel.textColor = .systemIndigo
 
         // Total Players Section
         totalPlayersTitleLabel.text = "총 인원 설정"
@@ -68,11 +69,15 @@ class HomeViewController: UIViewController {
         categorySegmentedControl.addTarget(self, action: #selector(categoryChanged), for: .valueChanged)
 
         // Start Button
-        startButton.setTitle("게임 시작", for: .normal)
+        startButton.setTitle("🎮  게임 시작", for: .normal)
         startButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        startButton.backgroundColor = .systemBlue
+        startButton.backgroundColor = .systemIndigo
         startButton.setTitleColor(.white, for: .normal)
         startButton.layer.cornerRadius = 16
+        startButton.layer.shadowColor = UIColor.systemIndigo.cgColor
+        startButton.layer.shadowOpacity = 0.3
+        startButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+        startButton.layer.shadowRadius = 8
         startButton.addTarget(self, action: #selector(startGame), for: .touchUpInside)
 
         // Build StackView hierarchy

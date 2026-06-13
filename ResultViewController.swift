@@ -71,9 +71,13 @@ class ResultViewController: UIViewController {
         // Restart Button
         restartButton.setTitle("🔄  다시 하기", for: .normal)
         restartButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        restartButton.backgroundColor = .systemBlue
+        restartButton.backgroundColor = .systemIndigo
         restartButton.setTitleColor(.white, for: .normal)
         restartButton.layer.cornerRadius = 16
+        restartButton.layer.shadowColor = UIColor.systemIndigo.cgColor
+        restartButton.layer.shadowOpacity = 0.3
+        restartButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+        restartButton.layer.shadowRadius = 8
         restartButton.addTarget(self, action: #selector(restart), for: .touchUpInside)
 
         let stack = UIStackView(arrangedSubviews: [

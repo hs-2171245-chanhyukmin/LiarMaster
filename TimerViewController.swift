@@ -14,6 +14,7 @@ class TimerViewController: UIViewController {
     private let timerLabel = UILabel()
     private let progressView = UIProgressView(progressViewStyle: .default)
     private let startButton = UIButton(type: .system)
+    private let endButton = UIButton(type: .system)
 
     // MARK: - Init
     init(liarRoles: [PlayerRole], keyword: String) {
@@ -40,6 +41,12 @@ class TimerViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "게임 진행"
         navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "처음으로",
+            style: .plain,
+            target: self,
+            action: #selector(goHome)
+        )
 
         // Info Label
         infoLabel.text = "토론을 시작하세요!\n라이어를 찾아내세요 🕵️"
@@ -56,7 +63,7 @@ class TimerViewController: UIViewController {
 
         // Progress View
         progressView.progress = 1.0
-        progressView.progressTintColor = .systemBlue
+        progressView.progressTintColor = .systemIndigo
         progressView.trackTintColor = .systemGray5
         progressView.layer.cornerRadius = 5
         progressView.clipsToBounds = true
@@ -66,17 +73,31 @@ class TimerViewController: UIViewController {
         // Start Button
         startButton.setTitle("▶  타이머 시작", for: .normal)
         startButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        startButton.backgroundColor = .systemBlue
+        startButton.backgroundColor = .systemIndigo
         startButton.setTitleColor(.white, for: .normal)
         startButton.layer.cornerRadius = 16
+        startButton.layer.shadowColor = UIColor.systemIndigo.cgColor
+        startButton.layer.shadowOpacity = 0.3
+        startButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+        startButton.layer.shadowRadius = 8
         startButton.addTarget(self, action: #selector(startTimer), for: .touchUpInside)
 
-        let stack = UIStackView(arrangedSubviews: [infoLabel, timerLabel, progressView, startButton])
+        // End Button (조기 종료)
+        endButton.setTitle("🗳  지금 투표하기", for: .normal)
+        endButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        endButton.backgroundColor = .systemOrange
+        endButton.setTitleColor(.white, for: .normal)
+        endButton.layer.cornerRadius = 16
+        endButton.isHidden = true  // 타이머 시작 전엔 숨김
+        endButton.addTarget(self, action: #selector(endEarly), for: .touchUpInside)
+
+        let stack = UIStackView(arrangedSubviews: [infoLabel, timerLabel, progressView, startButton, endButton])
         stack.axis = .vertical
         stack.spacing = 32
         stack.translatesAutoresizingMaskIntoConstraints = false
 
         startButton.heightAnchor.constraint(equalToConstant: 58).isActive = true
+        endButton.heightAnchor.constraint(equalToConstant: 52).isActive = true
 
         view.addSubview(stack)
         NSLayoutConstraint.activate([
@@ -91,6 +112,7 @@ class TimerViewController: UIViewController {
         startButton.isEnabled = false
         startButton.backgroundColor = .systemGray3
         startButton.setTitle("진행 중...", for: .normal)
+        endButton.isHidden = false  // 타이머 시작되면 조기 종료 버튼 표시
 
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.tick()
@@ -130,6 +152,36 @@ class TimerViewController: UIViewController {
         )
         alert.addAction(UIAlertAction(title: "결과 보기 →", style: .default) { [weak self] _ in
             guard let self = self else { return }
+            let resultVC = ResultViewController(liarRoles: self.liarRoles, keyword: self.keyword)
+            self.navigationController?.pushViewController(resultVC, animated: true)
+        })
+        present(alert, animated: true)
+    }
+
+    @objc private func goHome() {
+        let alert = UIAlertController(
+            title: "처음으로 돌아가기",
+            message: "게임을 종료하고 설정 화면으로 돌아가시겠어요?",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "처음으로", style: .destructive) { [weak self] _ in
+            self?.timer?.invalidate()
+            self?.navigationController?.popToRootViewController(animated: true)
+        })
+        present(alert, animated: true)
+    }
+
+    @objc private func endEarly() {
+        let alert = UIAlertController(
+            title: "투표 시작",
+            message: "타이머를 종료하고 라이어를 지목하시겠어요?",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "투표하기", style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            self.timer?.invalidate()
             let resultVC = ResultViewController(liarRoles: self.liarRoles, keyword: self.keyword)
             self.navigationController?.pushViewController(resultVC, animated: true)
         })
