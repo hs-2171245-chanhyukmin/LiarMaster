@@ -4,7 +4,19 @@
 
 ---
 
-## 📌 프로젝트 개요
+## � 스크린샷
+
+| 게임 설정 | 역할 확인 | 타이머 | 타이머 진행 |
+|:---------:|:---------:|:------:|:-----------:|
+| <img src="image/01_home.png" width="180"> | <img src="image/02_card.png" width="180"> | <img src="image/03_timer_ready.png" width="180"> | <img src="image/04_timer_running.png" width="180"> |
+
+| 라이어 지목 | 최종 결과 (라이어 승) | 라이어 반격 | 최종 결과 (역전승) |
+|:-----------:|:--------------------:|:-----------:|:-----------------:|
+| <img src="image/05_vote.png" width="180"> | <img src="image/06_result_liar_wins.png" width="180"> | <img src="image/07_liar_guess.png" width="180"> | <img src="image/08_result_liar_guess_wins.png" width="180"> |
+
+---
+
+## �📌 프로젝트 개요
 
 별도의 사회자 없이 스마트폰 한 대만으로 라이어 게임을 진행할 수 있습니다.  
 단어 선정, 역할 배정, 타이머 관리까지 자동으로 처리해줍니다.
