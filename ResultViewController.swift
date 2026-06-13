@@ -5,8 +5,10 @@ class ResultViewController: UIViewController {
     // MARK: - Data
     private let liarRoles: [PlayerRole]
     private let keyword: String
+    private let votedPlayerNumber: Int
 
     // MARK: - UI Components
+    private let voteResultLabel = UILabel()
     private let announceTitleLabel = UILabel()
     private let liarNumberLabel = UILabel()
     private let keywordTitleLabel = UILabel()
@@ -14,9 +16,10 @@ class ResultViewController: UIViewController {
     private let restartButton = UIButton(type: .system)
 
     // MARK: - Init
-    init(liarRoles: [PlayerRole], keyword: String) {
+    init(liarRoles: [PlayerRole], keyword: String, votedPlayerNumber: Int) {
         self.liarRoles = liarRoles
         self.keyword = keyword
+        self.votedPlayerNumber = votedPlayerNumber
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -35,6 +38,14 @@ class ResultViewController: UIViewController {
         view.backgroundColor = .white
         title = "결과 공개"
         navigationItem.hidesBackButton = true
+
+        // 투표 결과
+        let isCorrect = liarRoles.contains { $0.playerNumber == votedPlayerNumber }
+        voteResultLabel.text = isCorrect ? "✅ 정답! 라이어를 잡았어요!" : "❌ 틀렸어요! 라이어가 살아남았어요!"
+        voteResultLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        voteResultLabel.textColor = isCorrect ? .systemGreen : .systemRed
+        voteResultLabel.textAlignment = .center
+        voteResultLabel.numberOfLines = 0
 
         // "라이어는 바로..."
         announceTitleLabel.text = "🎭 라이어는 바로..."
@@ -82,6 +93,7 @@ class ResultViewController: UIViewController {
         restartButton.addTarget(self, action: #selector(restart), for: .touchUpInside)
 
         let stack = UIStackView(arrangedSubviews: [
+            voteResultLabel,
             announceTitleLabel,
             liarNumberLabel,
             separator,

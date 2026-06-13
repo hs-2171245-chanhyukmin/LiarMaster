@@ -8,6 +8,7 @@ class TimerViewController: UIViewController {
     private var timer: Timer?
     private let liarRoles: [PlayerRole]
     private let keyword: String
+    private let totalPlayers: Int
 
     // MARK: - UI Components
     private let infoLabel = UILabel()
@@ -17,7 +18,8 @@ class TimerViewController: UIViewController {
     private let endButton = UIButton(type: .system)
 
     // MARK: - Init
-    init(liarRoles: [PlayerRole], keyword: String) {
+    init(totalPlayers: Int, liarRoles: [PlayerRole], keyword: String) {
+        self.totalPlayers = totalPlayers
         self.liarRoles = liarRoles
         self.keyword = keyword
         super.init(nibName: nil, bundle: nil)
@@ -151,10 +153,10 @@ class TimerViewController: UIViewController {
             message: "이제 라이어를 지목하세요!",
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "결과 보기 →", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "투표하기 →", style: .default) { [weak self] _ in
             guard let self = self else { return }
-            let resultVC = ResultViewController(liarRoles: self.liarRoles, keyword: self.keyword)
-            self.navigationController?.pushViewController(resultVC, animated: true)
+            let voteVC = VoteViewController(totalPlayers: self.totalPlayers, liarRoles: self.liarRoles, keyword: self.keyword)
+            self.navigationController?.pushViewController(voteVC, animated: true)
         })
         present(alert, animated: true)
     }
@@ -183,8 +185,8 @@ class TimerViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "투표하기", style: .destructive) { [weak self] _ in
             guard let self = self else { return }
             self.timer?.invalidate()
-            let resultVC = ResultViewController(liarRoles: self.liarRoles, keyword: self.keyword)
-            self.navigationController?.pushViewController(resultVC, animated: true)
+            let voteVC = VoteViewController(totalPlayers: self.totalPlayers, liarRoles: self.liarRoles, keyword: self.keyword)
+            self.navigationController?.pushViewController(voteVC, animated: true)
         })
         present(alert, animated: true)
     }

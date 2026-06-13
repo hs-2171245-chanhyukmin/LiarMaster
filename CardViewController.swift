@@ -222,7 +222,7 @@ cardView.layer.borderColor = UIColor.systemIndigo.cgColor
             // 모든 인원 확인 완료 → TimerVC로 이동
             let liarRoles = roles.filter { $0.isLiar }
             let keyword = roles.first(where: { !$0.isLiar })?.keyword ?? ""
-            let timerVC = TimerViewController(liarRoles: liarRoles, keyword: keyword)
+            let timerVC = TimerViewController(totalPlayers: roles.count, liarRoles: liarRoles, keyword: keyword)
             navigationController?.pushViewController(timerVC, animated: true)
         }
     }
